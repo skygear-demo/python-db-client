@@ -40,7 +40,7 @@ class SkyHandler(object):
             print("Fail to get access token. Please make sure environment variables are given correctly.")
             quit()
 
-    def update_record(self, record_type, record_id, key, value):
+    def update_record(self, record_type, record_id, record_dict):
         if self.access_token is None:
             self.get_access_token('login')
         if self.access_token is not None:
@@ -50,10 +50,10 @@ class SkyHandler(object):
                 "database_id": "_private",
                 "access_token": self.access_token,
                 "records": [{
-                    "_id": record_id,
-                    key: value
+                    "_id": record_id
                 }]
             }
+            datajson['records'][0].update(record_dict)
             response = self.post_request(datajson)
             if 'result' in response:
                 return response['result']
