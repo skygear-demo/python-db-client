@@ -16,11 +16,52 @@ Assume you have Python 3.5 installed.
 Open terminal and call the followings:
 
 ```
-pyvenv-3.5 py3.5
-source py3.5/bin/activate
-cd <directory containing this file>
-pip install -r requirements.txt
-source ./set_env.sh
+$ cd <directory containing this file>
+$ pyvenv-3.5 py3.5
+$ source py3.5/bin/activate
+$ pip install -r requirements.txt
+$ source ./set_env.sh
 ```
 
-Then you can look at the example in *example.py* to see how to call the functions.
+Then you can look at the example in *example.py* to see how to call the functions. You may try out the sample script:
+
+```
+$ python example.py
+```
+You will see the result in your [Web Browser Database](https://portal.skygear.io/browser/index.html).
+
+## How to script
+
+### Initialize
+
+```
+sky = SkyHandler()
+```
+
+### Create / Update a record
+
+```
+sky.update_record(table_name, record_id, {
+		'record_field_1': 'record_content_1',
+		'record_field_2': 'record_content_2',
+		'record_field_3': 'record_content_3'
+	}
+)
+```
+
+### Search record
+
+```
+content_to_search = sky.search_record(
+	table_name, field_for_search, content_for_search,
+	field_to_search
+)
+```
+For example if you have a table called friends, you know the phone number of a user, and you want to search for his address:
+
+```
+james_address = sky.search_record(
+	'friends', 'phone_no', '98765432',
+	'address'
+) 
+```
