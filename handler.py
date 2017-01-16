@@ -58,7 +58,7 @@ class SkyHandler(object):
             if 'result' in response:
                 return response['result']
 
-    def search_record(self, record_type, key, value, col):
+    def search_records(self, record_type, keydict, col):
         if self.access_token is None:
             self.get_access_token('login')
         if self.access_token is not None:
@@ -68,16 +68,22 @@ class SkyHandler(object):
                 "database_id": "_private",
                 "record_type": record_type,
                 "predicate": [
-                    "eq", {"$type": "keypath", "$val": key}, value
+                    "and",
                 ]
             }
+            for key, value in keydict.items():
+                eq_array = ["eq", {"$type": "keypath", "$val": key}, value]
+                datajson['predicate'].append(eq_array)
             response = self.post_request(datajson)
             if ('result' in response and len(response['result'])
                 and col in response['result'][0]):
-                result = response['result'][0][col]
-                if col == '_id':
-                    return result.split('/')[1]
-                return result
+                content = []
+                for result in response['result']:
+                    result_str = result[col]
+                    if col == '_id':
+                        result_str = result_str.split('/')[1]
+                    content.append(result_str)
+                return content
 
     def post_request(self, datajson):
         filename = str(uuid.uuid4()).replace('-', '')
