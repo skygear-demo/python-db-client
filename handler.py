@@ -58,7 +58,7 @@ class SkyHandler(object):
             if 'result' in response:
                 return response['result']
 
-    def search_records(self, record_type, keydict, col):
+    def search_records(self, record_type, keydict):
         if self.access_token is None:
             self.get_access_token('login')
         if self.access_token is not None:
@@ -75,15 +75,18 @@ class SkyHandler(object):
                 eq_array = ["eq", {"$type": "keypath", "$val": key}, value]
                 datajson['predicate'].append(eq_array)
             response = self.post_request(datajson)
-            if ('result' in response and len(response['result'])
-                and col in response['result'][0]):
-                content = []
-                for result in response['result']:
-                    result_str = result[col]
-                    if col == '_id':
-                        result_str = result_str.split('/')[1]
-                    content.append(result_str)
-                return content
+            if ('result' in response and len(response['result'])):
+                return response['result']
+
+    def filter_result(self, results, col):
+        content = []
+        if (col in results[0]):
+            for result in results:
+                result_str = result[col]
+                if col == '_id':
+                    result_str = result_str.split('/')[1]
+                content.append(result_str)
+        return content
 
     def post_request(self, datajson):
         filename = str(uuid.uuid4()).replace('-', '')
@@ -93,5 +96,5 @@ class SkyHandler(object):
             r = requests.post(self.url, headers=self.headers, data=data)
             response = r.json()
         os.remove(filename)
-        print(response)
+        # print(response)
         return response

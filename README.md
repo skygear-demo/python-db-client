@@ -52,23 +52,25 @@ sky.update_record(table_name, record_id, {
 ### Search records
 
 ```
-content_to_search = sky.search_records(table_name, {
+content_to_fetch = sky.search_records(table_name, {
     'field_for_search_1': 'content_for_search_1',
     'field_for_search_2': 'content_for_search_2',
     'field_for_search_3': 'content_for_search_3',
-  },
-	field_to_search
+  }
 )
+
+content_to_search = sky.filter_result(fetched_content, field_to_search)
 ```
 For example if you have a table called friends, you know the name and phone number of a user, and you want to search for his address:
 
 ```
-james_address = sky.search_records('friends', {
+james_info = sky.search_records('friends', {
     'name': 'james',
     'phone_no': '98765432',
-  },
-	'address'
+  }
 )
+
+james_address = sky.filter_result(james_info, 'address')
 ```
 
 Please note that the values returned will be an array.
