@@ -72,7 +72,7 @@ class SkyHandler(object):
             if 'result' in response:
                 return response['result']
 
-    def search_records(self, record_type, keydict):
+    def fetch_records(self, record_type, keydict):
         if self.access_token is None:
             self.get_access_token('login')
         if self.access_token is not None:
@@ -92,7 +92,7 @@ class SkyHandler(object):
             if ('result' in response and len(response['result'])):
                 return response['result']
 
-    def filter_result(self, results, col):
+    def filter_by_column(self, results, col):
         content = []
         if (col in results[0]):
             for result in results:
@@ -102,6 +102,17 @@ class SkyHandler(object):
                 content.append(result_str)
         return content
 
+    def filter_by_field(self, results, col, field):
+        filtered_result = []
+        if (col in results[0]):
+            for result in results:
+                filter_str = result[col]
+                if col == '_id':
+                    filter_str = result_str.split('/')[1]
+                if filter_str == field:
+                    filtered_result.append(result)
+        return filtered_result
+
     def post_request(self, datajson):
         filename = str(uuid.uuid4()).replace('-', '')
         with open(filename, 'w') as datafile:
@@ -110,5 +121,4 @@ class SkyHandler(object):
             r = requests.post(self.url, headers=self.headers, data=data)
             response = r.json()
         os.remove(filename)
-        # print(response)
         return response

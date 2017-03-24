@@ -73,25 +73,40 @@ sky.update_records(
 ### Search records
 
 ```
-content_to_fetch = sky.search_records(table_name, {
+content_to_fetch = sky.fetch_records(table_name, {
     'field_for_search_1': 'content_for_search_1',
     'field_for_search_2': 'content_for_search_2',
     'field_for_search_3': 'content_for_search_3',
   }
 )
 
-content_to_search = sky.filter_result(fetched_content, field_to_search)
+content_to_search = sky.filter_by_column(fetched_content, field_to_search)
+content_to_filter = sky.filter_by_field(fetched_content, field_to_filter, field_content_to_filter)
 ```
-For example if you have a table called friends, you know the name and phone number of a user, and you want to search for his address:
+
+For example if you have a table called friends, you know the name and phone number of James, and you want to search for his address:
 
 ```
-james_info = sky.search_records('friends', {
-    'name': 'james',
+james_info = sky.fetch_records('friends', {
+    'name': 'James',
     'phone_no': '98765432',
   }
 )
+james_address = sky.filter_by_column(james_info, 'address')
+```
+Please note that the values returned will be in an array.
 
-james_address = sky.filter_result(james_info, 'address')
+You could also do filtering of records like this:
+
+```
+hk_friends = sky.fetch_records('friends', {
+    'country': 'Hong Kong',
+  }
+)
+male_friends = sky.filter_by_field(hk_friends, 'gender', 'male')
+male_friends_names = sky.filter_by_column(male_friends, 'name')
+female_friends = sky.filter_by_field(hk_friends, 'gender', 'female')
+female_friends_names = sky.filter_by_column(female_friends, 'name')
 ```
 
-Please note that the values returned will be an array.
+Then you can have 2 lists of names of male and female friends who live in Hong Kong.
