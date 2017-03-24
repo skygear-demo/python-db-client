@@ -69,7 +69,6 @@ class SkyHandler(object):
                 "records": records
             }
             response = self.post_request(datajson)
-            print(response)
             if 'result' in response:
                 return response['result']
 
