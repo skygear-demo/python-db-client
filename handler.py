@@ -58,6 +58,21 @@ class SkyHandler(object):
             if 'result' in response:
                 return response['result']
 
+    def update_records(self, records):
+        if self.access_token is None:
+            self.get_access_token('login')
+        if self.access_token is not None:
+            datajson = {
+                "action": "record:save",
+                "database_id": "_private",
+                "access_token": self.access_token,
+                "records": records
+            }
+            response = self.post_request(datajson)
+            print(response)
+            if 'result' in response:
+                return response['result']
+
     def search_records(self, record_type, keydict):
         if self.access_token is None:
             self.get_access_token('login')

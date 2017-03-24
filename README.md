@@ -49,6 +49,27 @@ sky.update_record(table_name, record_id, {
 )
 ```
 
+### Update records in a batch
+
+Please beware of the `_id` format when using
+
+```
+sky.update_records(
+  {
+    '_id': 'record_type/record_1_id',
+		'record_field_1': 'record_1_content_1',
+		'record_field_2': 'record_1_content_2',
+		'record_field_3': 'record_1_content_3'
+	},
+  {
+    '_id': 'record_type/record_2_id',
+		'record_field_1': 'record_2_content_1',
+		'record_field_2': 'record_2_content_2',
+		'record_field_3': 'record_2_content_3'
+	}
+)
+```
+
 ### Search records
 
 ```
