@@ -25,8 +25,10 @@ class SkyHandler(object):
             datajson = {
                 "api_key": api_key,
                 "action": action,
-                "username": username,
-                "email": email,
+                "auth_data": {
+                    "username": username,
+                    "email": email,
+                },
                 "password": password
             }
             response = self.post_request(datajson)
